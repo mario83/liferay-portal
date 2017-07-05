@@ -477,12 +477,15 @@ public class ResourceBlockLocalServiceImpl
 
 						qPos.add(resourceBlockId);
 
-						sqlQuery.executeUpdate();
-
-						PermissionCacheUtil.clearResourceBlockCache(
-							resourceBlock.getCompanyId(),
-							resourceBlock.getGroupId(),
-							resourceBlock.getName());
+						if (sqlQuery.executeUpdate() > 0) {
+							PermissionCacheUtil.clearResourceBlockCache(
+								resourceBlock.getCompanyId(),
+								resourceBlock.getGroupId(),
+								resourceBlock.getName());
+							
+							resourceBlockPermissionLocalService.
+								deleteResourceBlockPermissions(resourceBlockId);
+						}
 					}
 				}
 
